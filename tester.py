@@ -1,7 +1,7 @@
 import re
 Jkb = {
-        'package':r'[\t ]*?package[\t ]*?([a-zA-Z0-9\*\.]*);',
-        'import':r'[\t ]*?import[\t ]*?([a-zA-Z0-9\*\.]*);',
+        'package':r'[\t ]*?package[\t ]+?([a-zA-Z0-9\*\.]+);',
+        'import':r'[\t ]*?import[\t ]+?([a-zA-Z0-9\*\.]+);',
         'varPriv':r'',
         'varPub':r'',
         'varPro':r'',
@@ -26,19 +26,16 @@ def match(line,data):
 def iterate(this,i):
     c = 0
     try:
-        print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         for k in this:
-            print this[i][c]
             c = c + 1
     except:
         pass
-    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 def scope(fileName):
     startScope = []
     endScope = []
     this = []
     f = open(fileName,'r')
-    c = 0
+    c = 1
     for i in f.readlines():
         r1,o1 = match(i,"{")
         r2,o2 = match(i,"}")
@@ -47,20 +44,10 @@ def scope(fileName):
         if r2 == 1:
             endScope.append(c)
             g = open(fileName,'r')
-            this.append(g.readlines()[startScope[-1]:endScope[-1]])
+            this.append([startScope[-1],endScope[-1]])
         c = c + 1
     for i in range(0,len(this)):
         iterate(this,i)
-    
     f.close()
+    print this
 scope('../java-IDE/CodingWindow.java')
-"""
-for i in f.readlines():
-    if re.match(Jkb['import'],i):
-        print re.findall(Jkb['import'],str(i))
-    if re.match(Jkb['package'],i):
-        print re.findall(Jkb['package'],str(i))    
-    if "{" in i:
-        print c 
-    c = c + 1
-"""
